@@ -1,0 +1,59 @@
+# Smart Farming System App: Gene-Edited Crop Health Monitoring
+
+# 1. Import necessary libraries
+from flask import Flask, render_template, request, jsonify
+import random
+
+# 2. Initialize Flask app
+app = Flask(_name_)
+
+# 3. Define a class for gene-edited crops
+class GeneEditedCrop:
+    def _init_(self, crop_name):
+        self.crop_name = crop_name
+        self.health_status = "Healthy"
+        self.moisture_level = random.randint(30, 70)  # Simulated moisture level
+        self.temperature = random.uniform(20.0, 35.0)  # Simulated temperature in Celsius
+
+    def update_health_status(self):
+        # Simulate health assessment based on moisture and temperature thresholds
+        if self.moisture_level < 40 or self.temperature > 30.0:
+            self.health_status = "Stressed"
+        elif self.moisture_level < 60:
+            self.health_status = "Moderate"
+        else:
+            self.health_status = "Healthy"
+
+    def get_health_status(self):
+        return self.health_status
+
+    def get_moisture_level(self):
+        return self.moisture_level
+
+    def get_temperature(self):
+        return self.temperature
+
+# Create an instance of the gene-edited crop (e.g., wheat)
+wheat_crop = GeneEditedCrop(crop_name="Wheat")
+
+# 4. Define routes and views
+@app.route("/")
+def index():
+    return render_template("index.html", crop_name=wheat_crop.crop_name)
+
+@app.route("/crop_data")
+def get_crop_data():
+    # Update crop health status
+    wheat_crop.update_health_status()
+    return jsonify(
+        {
+            "crop_name": wheat_crop.crop_name,
+            "health_status": wheat_crop.get_health_status(),
+            "moisture_level": wheat_crop.get_moisture_level(),
+            "temperature": wheat_crop.get_temperature(),
+        }
+    )
+
+# 5. Run the app
+if _name_ == "_main_":
+    app.run(debug=True)
